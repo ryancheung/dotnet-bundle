@@ -7,6 +7,8 @@ namespace Dotnet.Bundle
         private readonly BundleAppTask _task;
         private readonly StructureBuilder _builder;
 
+        public string MonoGameContentDirectory => Path.Combine(_builder.PublishDirectory, "Content");
+
         public AppBundler(BundleAppTask task, StructureBuilder builder)
         {
             _task = task;
@@ -22,10 +24,15 @@ namespace Dotnet.Bundle
             CopyFiles(
                 new DirectoryInfo(_builder.PublishDirectory),
                 new DirectoryInfo(_builder.MacosDirectory),
-                new DirectoryInfo(_builder.AppDirectory));
+                new DirectoryInfo(_builder.AppDirectory),
+                new DirectoryInfo(MonoGameContentDirectory));
+
+            CopyFiles(
+                new DirectoryInfo(MonoGameContentDirectory),
+                new DirectoryInfo(_builder.ResourcesDirectory));
         }
 
-        private void CopyFiles(DirectoryInfo source, DirectoryInfo target, DirectoryInfo exclude)
+        private void CopyFiles(DirectoryInfo source, DirectoryInfo target, DirectoryInfo exclude = null, DirectoryInfo exclude2 = null)
         {
             Directory.CreateDirectory(target.FullName);
 
@@ -41,11 +48,13 @@ namespace Dotnet.Bundle
 
             foreach (var sourceSubDir in source.GetDirectories())
             {
-                if (sourceSubDir.FullName != exclude.FullName)
-                {
-                    var targetSubDir = target.CreateSubdirectory(sourceSubDir.Name);
-                    CopyFiles(sourceSubDir, targetSubDir, exclude);
-                }
+                if (exclude != null && sourceSubDir.FullName == exclude.FullName)
+                    continue;
+                if (exclude2 != null && sourceSubDir.FullName == exclude2.FullName)
+                    continue;
+
+                var targetSubDir = target.CreateSubdirectory(sourceSubDir.Name);
+                CopyFiles(sourceSubDir, targetSubDir, exclude);
             }
         }
 
