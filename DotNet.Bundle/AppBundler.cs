@@ -8,6 +8,7 @@ namespace Dotnet.Bundle
         private readonly StructureBuilder _builder;
 
         public string MonoGameContentDirectory => Path.Combine(_builder.PublishDirectory, "Content");
+        public string TargetContentDirectory => Path.Combine(_builder.ResourcesDirectory, "Content");
 
         public AppBundler(BundleAppTask task, StructureBuilder builder)
         {
@@ -27,9 +28,10 @@ namespace Dotnet.Bundle
                 new DirectoryInfo(_builder.AppDirectory),
                 new DirectoryInfo(MonoGameContentDirectory));
 
+            Directory.CreateDirectory(TargetContentDirectory);
             CopyFiles(
                 new DirectoryInfo(MonoGameContentDirectory),
-                new DirectoryInfo(_builder.ResourcesDirectory));
+                new DirectoryInfo(TargetContentDirectory));
         }
 
         private void CopyFiles(DirectoryInfo source, DirectoryInfo target, DirectoryInfo exclude = null, DirectoryInfo exclude2 = null)
