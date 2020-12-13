@@ -5,6 +5,12 @@
         <NoPackageAnalysis>true</NoPackageAnalysis>
         <BuildOutputTargetFolder>tasks</BuildOutputTargetFolder>
         <Version>0.9.13</Version>
+        <PackOnBuild>true</PackOnBuild>
+        <PackageId>MonoGame.Dotnet.Bundle</PackageId>
+        <Authors>ryancheung</Authors>
+        <PackageProjectUrl>https://github.com/ryancheung/dotnet-bundle</PackageProjectUrl>
+        <Description>Command-line interface tools for bundling MonoGame projects into MacOS applications (.app)</Description>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     </PropertyGroup>
 
     <ItemGroup>
